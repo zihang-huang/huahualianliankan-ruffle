@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Play target.swf with Ruffle</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #05070f;
+      --panel: #0f1625;
+      --accent: #8fb3ff;
+      --border: #1f2a3d;
+      --text: #e6ebf5;
+      --muted: #c5ccda;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    html,
+    body {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+      min-height: 100%;
+      display: block;
+      padding: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 20%, #0b1530, #05070f 45%), var(--bg);
+      color: var(--text);
+      font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    }
+    main {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      padding: 0;
+      display: block;
+      background: none;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: hidden;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2vw, 1.9rem);
+      letter-spacing: 0.02em;
+    }
+    p {
+      margin: 4px 0 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    #player-shell {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      border: none;
+      background: radial-gradient(circle at 30% 20%, #15213a, #0a0f1c 55%);
+      display: grid;
+      place-items: center;
+    }
+    #player-container {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+    }
+    #player-container .message {
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+  </style>
+  <script>
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+      publicPath: "./ruffle-nightly-2025_12_29-web-selfhosted/",
+      logLevel: "error"
+    };
+  </script>
+  <script src="./ruffle-nightly-2025_12_29-web-selfhosted/ruffle.js"></script>
+</head>
+<body>
+  <main>
+    <div id="player-shell">
+      <div id="player-container">
+        <div class="message" aria-live="polite">Loading Ruffle and target.swf…</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function boot() {
+      const container = document.getElementById("player-container");
+      if (!container) {
+        return;
+      }
+
+      const ruffle = window.RufflePlayer?.newest?.();
+      if (!ruffle) {
+        return;
+      }
+
+      const player = ruffle.createPlayer();
+      player.id = "flash-player";
+      player.style.width = "100%";
+      player.style.height = "100%";
+
+      container.replaceChildren(player);
+      player
+        .load({ url: "./target.swf" })
+        .catch((error) => {
+          console.error(error);
+        });
+    })();
+  </script>
+</body>
+</html>
